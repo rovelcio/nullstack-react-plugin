@@ -12,7 +12,7 @@ export function createPlugin(options: CreatePluginOptions) {
     render(context) {
       return renderWrapper(context.Component, context)
     }
-  
+
 }
 
   const { renderWrapper } = options
@@ -28,14 +28,14 @@ export function createPlugin(options: CreatePluginOptions) {
       return React.Component.isPrototypeOf(node.type) || React.PureComponent.isPrototypeOf(node.type)
     }
 
-    let error = null
+    let _error = null
     function Tester(...args) {
       try {
         const vnode = node.type(...args)
         node.type.__useReact = vnode && vnode.$$typeof === reactTypeof
       } catch (err) {
         if (!errorIsComingFromPreactComponent(err)) {
-          error = err
+          _error = err
           node.type.__useReact = false
         }
       }
@@ -77,8 +77,8 @@ export function createPlugin(options: CreatePluginOptions) {
     } catch (e) {}
   }
 
-  return (options) => {
-    const { node } = options
+  return (options2) => {
+    const { node } = options2
 
     if (node && Array.isArray(node.children)) {
       node.children?.forEach(checkIfReact)
