@@ -8,6 +8,13 @@ interface CreatePluginOptions {
 }
 
 export function createPlugin(options: CreatePluginOptions) {
+  class ReactEntrypoint extends Nullstack {
+    render(context) {
+      return renderWrapper(context.Component, context)
+    }
+  
+}
+
   const { renderWrapper } = options
   function checkIfReact(node) {
     if (Object.keys(node.type || {}).includes('__useReact') && !node.type.__useReact) return
@@ -42,7 +49,7 @@ export function createPlugin(options: CreatePluginOptions) {
 
     if (node.type.__useReact && !node.type.__useReactInstance) {
       const Component = node.type
-      node.type.__useReactInstance = class ReactEntrypoint extends Nullstack {
+      node.type.__useReactInstance = class extends ReactEntrypoint {
 
         render(context) {
           return renderWrapper(Component, context)
